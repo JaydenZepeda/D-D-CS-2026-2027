@@ -5,30 +5,27 @@ import java.util.Scanner;
 
 public class PugRescueTester {
 
-
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		try {
 
 			ArrayList<String> breedList = new ArrayList<String>();
-			
+
 			fillWithBreeds(breedList);
 
 			ArrayList<Dog> testSubjects = new ArrayList<Dog>();
-			final boolean EFFICIENCY = false;
-			//Set max to 10000000 for an efficiency check, or 100 for an accuracy check
+			final boolean EFFICIENCY = true;
+			// Set max to 10000000 for an efficiency check, or 100 for an accuracy check
 			int max = 0;
 			if (EFFICIENCY)
 				max = 10000000;
 			else
 				max = 100;
 
-			for (int i = 0; i < max; i++)
-			{
+			for (int i = 0; i < max; i++) {
 				if (i % 5 == 0 || i % 17 == 0)
-					testSubjects.add(new Dog("Dog"+i));
+					testSubjects.add(new Dog("Dog" + i));
 				else
-					testSubjects.add(new Dog("Dog"+i, getRandomBreed(breedList)));
+					testSubjects.add(new Dog("Dog" + i, getRandomBreed(breedList)));
 			}
 
 			int banned = 0;
@@ -40,10 +37,9 @@ public class PugRescueTester {
 			long startTime = System.currentTimeMillis();
 			PugSaver.rescuePugs(testSubjects);
 			long totalTime = System.currentTimeMillis() - startTime;
-			System.out.println("Total seconds to rescue pugs: " + totalTime/1000.0);
+			System.out.println("Total seconds to rescue pugs: " + totalTime / 1000.0);
 
-			for (int i = 0; i < banned; i++)
-			{
+			for (int i = 0; i < banned; i++) {
 				if (testSubjects.get(i).getBreed().equals("Pug")) {
 					System.out.println("Incorrect!");
 					return;
@@ -56,8 +52,8 @@ public class PugRescueTester {
 				}
 			}
 			System.out.println("Probably correct!");
-			
-		} catch(FileNotFoundException e) {
+
+		} catch (FileNotFoundException e) {
 			System.out.println("You must place the breeds.txt file in the proper place.");
 
 		}
@@ -65,14 +61,14 @@ public class PugRescueTester {
 
 	public static void fillWithBreeds(ArrayList<String> breeds) throws FileNotFoundException {
 		Scanner breedReader = new Scanner(new File("breeds.txt"));
-		while(breedReader.hasNext()) {
+		while (breedReader.hasNext()) {
 			breeds.add(breedReader.nextLine());
 		}
 		breedReader.close();
 	}
 
 	public static String getRandomBreed(ArrayList<String> breeds) {
-		int index = (int) Math.random()*breeds.size();
+		int index = (int) Math.random() * breeds.size();
 		return breeds.get(index);
 	}
 }
