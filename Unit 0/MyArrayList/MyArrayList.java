@@ -33,7 +33,10 @@ public class MyArrayList<E> {
 
 	/* Are there zero objects in the array list? */
 	public boolean isEmpty() {
-		/* ---- YOUR CODE HERE ---- */
+		if (objectCount == 0) {
+			return true;
+		}
+		return false;
 	}
 
 	/* Get the index-th object in the list. */
@@ -51,8 +54,8 @@ public class MyArrayList<E> {
 	 * otherwise returns false.
 	 */
 	public boolean contains(E obj) {
-		for (E e : internalArray) {
-			if (e.equals(obj)) {
+		for (int i = 0; i < objectCount; i++) {
+			if (internalArray[i].equals(obj)) {
 				return true;
 			}
 		}
@@ -62,10 +65,13 @@ public class MyArrayList<E> {
 	/* Insert an object at index */
 	@SuppressWarnings("unchecked")
 	public void add(int index, E obj) {
+		if (index >= objectCount) {
+			throw new IndexOutOfBoundsException();
+		}
 		this.objectCount++;
 		E[] temp = (E[]) new Object[objectCount];
 		temp[index] = obj;
-		for (int i = 0; i < internalArray.length; i++) {
+		for (int i = 0; i < objectCount; i++) {
 			if (i >= index) {
 				internalArray[i] = temp[i + 1];
 			}
@@ -78,12 +84,16 @@ public class MyArrayList<E> {
 	@SuppressWarnings("unchecked")
 	public boolean add(E obj) {
 		this.objectCount++;
-		E[] temp = (E[]) new Object[objectCount];
-		temp[objectCount - 1] = obj;
-		for (int i = 0; i < internalArray.length; i++) {
-			internalArray[i] = temp[i];
+		if (internalArray.length < objectCount) {
+			E[] temp = (E[]) new Object[objectCount];
+			temp[objectCount - 1] = obj;
+			for (int i = 0; i < internalArray.length; i++) {
+				temp[i] = internalArray[i];
+			}
+			internalArray = temp;
+			return true;
 		}
-		internalArray = temp;
+		internalArray[objectCount - 1] = obj;
 		return true;
 	}
 
@@ -113,8 +123,8 @@ public class MyArrayList<E> {
 	 */
 	public String toString() {
 		String str = "[";
-		for (E e : internalArray) {
-			str += e.toString() + ", ";
+		for (int i = 0; i < objectCount; i++) {
+			str += internalArray[i].toString() + ", ";
 		}
 		str = str.substring(0, str.lastIndexOf(",")) + "]";
 		return str;
