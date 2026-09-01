@@ -69,15 +69,30 @@ public class MyArrayList<E> {
 			throw new IndexOutOfBoundsException();
 		}
 		this.objectCount++;
-		E[] temp = (E[]) new Object[objectCount];
-		temp[index] = obj;
-		for (int i = 0; i < objectCount; i++) {
-			if (i >= index) {
-				internalArray[i] = temp[i + 1];
+		if (internalArray.length < objectCount) {
+			E[] temp = (E[]) new Object[objectCount];
+			temp[index] = obj;
+			for (int i = 0; i < internalArray.length; i++) {
+				if (i >= index) {
+					temp[i + 1] = internalArray[i];
+				} else {
+					temp[i] = internalArray[i];
+				}
 			}
-			internalArray[i] = temp[i];
+			internalArray = temp;
+		} else {
+			E[] temp = (E[]) new Object[100];
+			temp[index] = obj;
+			for (int i = 0; i < objectCount - 1; i++) {
+				if (i >= index) {
+					temp[i + 1] = internalArray[i];
+				} else {
+					temp[i] = internalArray[i];
+				}
+			}
+			internalArray = temp;
 		}
-		internalArray = temp;
+
 	}
 
 	/* Add an object to the end of the list; returns true */
@@ -111,7 +126,35 @@ public class MyArrayList<E> {
 	 * if this list changed as a result of the call).
 	 */
 	public boolean remove(E obj) {
-
+		for (int i = 0; i < objectCount; i++) {
+			if (internalArray[i].equals(obj)) {
+				this.objectCount--;
+				if (internalArray.length > objectCount) {
+					E[] temp = (E[]) new Object[100];
+					for (int index = 0; index < objectCount + 1; i--) {
+						if (index <= i) {
+							temp[index] = internalArray[index + 1];
+						} else {
+							temp[index] = internalArray[index];
+						}
+					}
+					internalArray = temp;
+					return true;
+				} else {
+					E[] temp = (E[]) new Object[objectCount];
+					for (int index = 0; index < objectCount + 1; i--) {
+						if (index <= i) {
+							temp[index] = internalArray[index + 1];
+						} else {
+							temp[index] = internalArray[index];
+						}
+					}
+					internalArray = temp;
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/*
