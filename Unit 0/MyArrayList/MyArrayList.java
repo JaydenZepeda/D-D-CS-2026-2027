@@ -26,12 +26,13 @@ public class MyArrayList<E> {
 		this.internalArray = (E[]) new Object[initialCapacity];
 	}
 
+	// O(1)
 	/* Return the number of active slots in the array list */
 	public int size() {
 		return objectCount;
 	}
 
-	/* Are there zero objects in the array list? */
+	// O(1)
 	public boolean isEmpty() {
 		if (objectCount == 0) {
 			return true;
@@ -39,16 +40,27 @@ public class MyArrayList<E> {
 		return false;
 	}
 
+	// O(1)
 	/* Get the index-th object in the list. */
 	public E get(int index) {
-		/* ---- YOUR CODE HERE ---- */
+		if (index >= objectCount || index < 0) {
+			throw new IndexOutOfBoundsException();
+		}
+		return internalArray[index];
 	}
 
+	// O(1)
 	/* Replace the object at index with obj. returns object that was replaced. */
 	public E set(int index, E obj) {
-		/* ---- YOUR CODE HERE ---- */
+		if (index >= objectCount || index < 0) {
+			throw new IndexOutOfBoundsException();
+		}
+		E old = internalArray[index];
+		internalArray[index] = obj;
+		return old;
 	}
 
+	// O(n)
 	/*
 	 * Returns true if this list contains an element equal to obj;
 	 * otherwise returns false.
@@ -65,12 +77,12 @@ public class MyArrayList<E> {
 	/* Insert an object at index */
 	@SuppressWarnings("unchecked")
 	public void add(int index, E obj) {
-		if (index >= objectCount) {
+		if (index > objectCount || index < 0) {
 			throw new IndexOutOfBoundsException();
 		}
 		this.objectCount++;
 		if (internalArray.length < objectCount) {
-			E[] temp = (E[]) new Object[objectCount];
+			E[] temp = (E[]) new Object[objectCount * 2];
 			temp[index] = obj;
 			for (int i = 0; i < internalArray.length; i++) {
 				if (i >= index) {
@@ -81,16 +93,10 @@ public class MyArrayList<E> {
 			}
 			internalArray = temp;
 		} else {
-			E[] temp = (E[]) new Object[100];
-			temp[index] = obj;
-			for (int i = 0; i < objectCount - 1; i++) {
-				if (i >= index) {
-					temp[i + 1] = internalArray[i];
-				} else {
-					temp[i] = internalArray[i];
-				}
+			for (int i = objectCount; i >= index; i--) {
+				internalArray[i + 1] = internalArray[i];
 			}
-			internalArray = temp;
+			internalArray[index] = obj;
 		}
 
 	}
@@ -100,7 +106,7 @@ public class MyArrayList<E> {
 	public boolean add(E obj) {
 		this.objectCount++;
 		if (internalArray.length < objectCount) {
-			E[] temp = (E[]) new Object[objectCount];
+			E[] temp = (E[]) new Object[objectCount * 2];
 			temp[objectCount - 1] = obj;
 			for (int i = 0; i < internalArray.length; i++) {
 				temp[i] = internalArray[i];
@@ -114,7 +120,16 @@ public class MyArrayList<E> {
 
 	/* Remove the object at index and shift. Returns removed object. */
 	public E remove(int index) {
-		/* ---- YOUR CODE HERE ---- */
+		if (index >= objectCount || index < 0) {
+			throw new IndexOutOfBoundsException();
+		}
+		E obj = internalArray[index];
+		for (int i = index; i < objectCount - 1; i++) {
+			internalArray[i] = internalArray[i + 1];
+		}
+		internalArray[objectCount] = null;
+		objectCount--;
+		return obj;
 	}
 
 	/*
@@ -126,33 +141,12 @@ public class MyArrayList<E> {
 	 * if this list changed as a result of the call).
 	 */
 	public boolean remove(E obj) {
-		for (int i = 0; i < objectCount; i++) {
+		for (int i = 0; i < internalArray.length; i++) {
 			if (internalArray[i].equals(obj)) {
-				this.objectCount--;
-				if (internalArray.length > objectCount) {
-					E[] temp = (E[]) new Object[100];
-					for (int index = 0; index < objectCount + 1; i--) {
-						if (index <= i) {
-							temp[index] = internalArray[index + 1];
-						} else {
-							temp[index] = internalArray[index];
-						}
-					}
-					internalArray = temp;
-					return true;
-				} else {
-					E[] temp = (E[]) new Object[objectCount];
-					for (int index = 0; index < objectCount + 1; i--) {
-						if (index <= i) {
-							temp[index] = internalArray[index + 1];
-						} else {
-							temp[index] = internalArray[index];
-						}
-					}
-					internalArray = temp;
-					return true;
-				}
+				remove(i);
+				objectCount--;
 			}
+			return true;
 		}
 		return false;
 	}
@@ -165,6 +159,9 @@ public class MyArrayList<E> {
 	 * Elements are separated by a comma and a space.
 	 */
 	public String toString() {
+		if (isEmpty()) {
+			return "[]";
+		}
 		String str = "[";
 		for (int i = 0; i < objectCount; i++) {
 			str += internalArray[i].toString() + ", ";

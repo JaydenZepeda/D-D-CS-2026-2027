@@ -11,7 +11,7 @@ public class MyArrayListTester {
         arrayList.add(num3);
         System.out.println(arrayList.toString());
         arrayList.add(1, 3);
-        arrayList.remove(num2);
+        arrayList.remove(0);
         System.out.println(arrayList.toString());
 
     }
