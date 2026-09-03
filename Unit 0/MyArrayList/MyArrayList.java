@@ -66,6 +66,9 @@ public class MyArrayList<E> {
 	 * otherwise returns false.
 	 */
 	public boolean contains(E obj) {
+		if (isEmpty()) {
+			return false;
+		}
 		for (int i = 0; i < objectCount; i++) {
 			if (internalArray[i].equals(obj)) {
 				return true;
@@ -74,10 +77,11 @@ public class MyArrayList<E> {
 		return false;
 	}
 
+	// O(n - i)
 	/* Insert an object at index */
 	@SuppressWarnings("unchecked")
 	public void add(int index, E obj) {
-		if (index > objectCount || index < 0) {
+		if (index >= objectCount || index < 0) {
 			throw new IndexOutOfBoundsException();
 		}
 		this.objectCount++;
@@ -101,6 +105,7 @@ public class MyArrayList<E> {
 
 	}
 
+	// O(1) avg
 	/* Add an object to the end of the list; returns true */
 	@SuppressWarnings("unchecked")
 	public boolean add(E obj) {
@@ -113,11 +118,13 @@ public class MyArrayList<E> {
 			}
 			internalArray = temp;
 			return true;
+		} else {
+			internalArray[objectCount - 1] = obj;
 		}
-		internalArray[objectCount - 1] = obj;
 		return true;
 	}
 
+	// O(n - i)
 	/* Remove the object at index and shift. Returns removed object. */
 	public E remove(int index) {
 		if (index >= objectCount || index < 0) {
@@ -140,13 +147,14 @@ public class MyArrayList<E> {
 	 * Returns true if this list contained the specified element (or equivalently,
 	 * if this list changed as a result of the call).
 	 */
+	// O(n)
 	public boolean remove(E obj) {
 		for (int i = 0; i < internalArray.length; i++) {
 			if (internalArray[i].equals(obj)) {
 				remove(i);
 				objectCount--;
+				return true;
 			}
-			return true;
 		}
 		return false;
 	}
@@ -158,16 +166,18 @@ public class MyArrayList<E> {
 	 * etc.
 	 * Elements are separated by a comma and a space.
 	 */
+	// O(n)
 	public String toString() {
 		if (isEmpty()) {
 			return "[]";
 		}
-		String str = "[";
+		StringBuilder output = new StringBuilder("[");
 		for (int i = 0; i < objectCount; i++) {
-			str += internalArray[i].toString() + ", ";
+			output.append(this.get(i) + ", ");
 		}
-		str = str.substring(0, str.lastIndexOf(",")) + "]";
-		return str;
+		output.delete(output.lastIndexOf(","), output.length());
+		output.append("]");
+		return output.toString();
 	}
 
 }
