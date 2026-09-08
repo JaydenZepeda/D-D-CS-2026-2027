@@ -23,6 +23,9 @@ public class MyArrayList<E> {
 	/* Constructor with initial capacity */
 	@SuppressWarnings("unchecked")
 	public MyArrayList(int initialCapacity) {
+		if (initialCapacity <= 0) {
+			throw new IllegalArgumentException("Initial Capacity must be greater than 0");
+		}
 		this.internalArray = (E[]) new Object[initialCapacity];
 	}
 
@@ -81,24 +84,24 @@ public class MyArrayList<E> {
 	/* Insert an object at index */
 	@SuppressWarnings("unchecked")
 	public void add(int index, E obj) {
-		if (index >= objectCount || index < 0) {
+		if (index > objectCount || index < 0) {
 			throw new IndexOutOfBoundsException();
 		}
 		this.objectCount++;
 		if (internalArray.length < objectCount) {
-			E[] temp = (E[]) new Object[objectCount * 2];
-			temp[index] = obj;
-			for (int i = 0; i < internalArray.length; i++) {
+			E[] temp = (E[]) new Object[(objectCount + 1) * 2];
+			for (int i = 0; i < objectCount - 1; i++) {
 				if (i >= index) {
 					temp[i + 1] = internalArray[i];
 				} else {
 					temp[i] = internalArray[i];
 				}
 			}
+			temp[index] = obj;
 			internalArray = temp;
 		} else {
-			for (int i = objectCount; i >= index; i--) {
-				internalArray[i + 1] = internalArray[i];
+			for (int i = objectCount - 1; i > index; i--) {
+				internalArray[i] = internalArray[i - 1];
 			}
 			internalArray[index] = obj;
 		}
@@ -134,8 +137,8 @@ public class MyArrayList<E> {
 		for (int i = index; i < objectCount - 1; i++) {
 			internalArray[i] = internalArray[i + 1];
 		}
-		internalArray[objectCount] = null;
 		objectCount--;
+		internalArray[objectCount] = null;
 		return obj;
 	}
 
@@ -149,10 +152,9 @@ public class MyArrayList<E> {
 	 */
 	// O(n)
 	public boolean remove(E obj) {
-		for (int i = 0; i < internalArray.length; i++) {
+		for (int i = 0; i < objectCount; i++) {
 			if (internalArray[i].equals(obj)) {
 				remove(i);
-				objectCount--;
 				return true;
 			}
 		}
@@ -178,6 +180,10 @@ public class MyArrayList<E> {
 		output.delete(output.lastIndexOf(","), output.length());
 		output.append("]");
 		return output.toString();
+	}
+
+	public void clear() {
+		objectCount = 0;
 	}
 
 }

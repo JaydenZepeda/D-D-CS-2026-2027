@@ -8,12 +8,12 @@ public class PugRescueTester {
     public static void main(String[] args) {
         try {
 
-            MyArrayList<String> breedList = new MyArrayList<String>();
+            ArrayList<String> breedList = new ArrayList<String>();
 
             fillWithBreeds(breedList);
 
-            MyArrayList<Dog> testSubjects = new MyArrayList<Dog>();
-            final boolean EFFICIENCY = false;
+            ArrayList<Dog> testSubjects = new ArrayList<Dog>();
+            final boolean EFFICIENCY = true;
             // Set max to 10000000 for an efficiency check, or 100 for an accuracy check
             int max = 0;
             if (EFFICIENCY)
@@ -59,7 +59,7 @@ public class PugRescueTester {
         }
     }
 
-    public static void fillWithBreeds(MyArrayList<String> breeds) throws FileNotFoundException {
+    public static void fillWithBreeds(ArrayList<String> breeds) throws FileNotFoundException {
         Scanner breedReader = new Scanner(new File("breeds.txt"));
         while (breedReader.hasNext()) {
             breeds.add(breedReader.nextLine());
@@ -67,7 +67,7 @@ public class PugRescueTester {
         breedReader.close();
     }
 
-    public static String getRandomBreed(MyArrayList<String> breeds) {
+    public static String getRandomBreed(ArrayList<String> breeds) {
         int index = (int) Math.random() * breeds.size();
         return breeds.get(index);
     }
