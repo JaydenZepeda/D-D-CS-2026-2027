@@ -17,22 +17,27 @@ public class PugSaver {
 				nonpugCount++;
 			}
 		}
-		ArrayList<Dog> nonpug = new ArrayList<Dog>(nonpugCount);
-		ArrayList<Dog> pugs = new ArrayList<Dog>(pugCount);
+		Dog[] nonpug = new Dog[nonpugCount];
+		Dog[] pugs = new Dog[pugCount];
+
+		int pugIndex = 0;
+		int nonpugIndex = 0;
 		for (int i = 0; i < testSubjects.size(); i++) {
 			if (testSubjects.get(i).getBreed().equals("Pug")) {
-				pugs.add(testSubjects.get(i));
+				pugs[pugIndex] = testSubjects.get(i);
+				pugIndex++;
 			} else {
-				nonpug.add(testSubjects.get(i));
+				nonpug[nonpugIndex] = testSubjects.get(i);
+				nonpugIndex++;
 			}
 		}
 		int index = 0;
-		for (int i = 0; i < nonpug.size(); i++) {
-			testSubjects.set(index, nonpug.get(i));
+		for (int i = 0; i < nonpugCount; i++) {
+			testSubjects.set(index, nonpug[i]);
 			index++;
 		}
-		for (int i = 0; i < pugs.size(); i++) {
-			testSubjects.set(index, pugs.get(i));
+		for (int i = 0; i < pugCount; i++) {
+			testSubjects.set(index, pugs[i]);
 			index++;
 		}
 	}

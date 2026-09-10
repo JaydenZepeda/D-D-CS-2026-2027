@@ -6,6 +6,8 @@
  * Your indexed functions should throw IndexOutOfBoundsException if index is invalid!
  */
 
+import java.util.Objects;
+
 public class MyArrayList<E> {
 
 	/* Internal Object counter */
@@ -73,7 +75,7 @@ public class MyArrayList<E> {
 			return false;
 		}
 		for (int i = 0; i < objectCount; i++) {
-			if (internalArray[i].equals(obj)) {
+			if (Objects.equals(internalArray[i], obj)) {
 				return true;
 			}
 		}
@@ -89,7 +91,7 @@ public class MyArrayList<E> {
 		}
 		this.objectCount++;
 		if (internalArray.length < objectCount) {
-			E[] temp = (E[]) new Object[(objectCount + 1) * 2];
+			E[] temp = (E[]) new Object[objectCount * 2];
 			for (int i = 0; i < objectCount - 1; i++) {
 				if (i >= index) {
 					temp[i + 1] = internalArray[i];
@@ -153,7 +155,7 @@ public class MyArrayList<E> {
 	// O(n)
 	public boolean remove(E obj) {
 		for (int i = 0; i < objectCount; i++) {
-			if (internalArray[i].equals(obj)) {
+			if (Objects.equals(internalArray[i], obj)) {
 				remove(i);
 				return true;
 			}

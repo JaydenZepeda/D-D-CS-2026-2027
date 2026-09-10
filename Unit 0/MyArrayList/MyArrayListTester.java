@@ -7,6 +7,8 @@ public class MyArrayListTester {
 
         testSubjects.add("Poo");
         testSubjects.add("You");
+        testSubjects.add(null);
         testSubjects.remove(null);
+
     }
 }
