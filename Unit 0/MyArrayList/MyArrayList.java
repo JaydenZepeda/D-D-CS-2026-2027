@@ -6,7 +6,7 @@
  * Your indexed functions should throw IndexOutOfBoundsException if index is invalid!
  */
 
-import java.util.Objects;
+import java.util.*;
 
 public class MyArrayList<E> {
 
@@ -186,6 +186,30 @@ public class MyArrayList<E> {
 
 	public void clear() {
 		objectCount = 0;
+	}
+
+	public boolean removeAll(Collection<?> c) {
+		boolean removed = false;
+
+		for (int i = 0; i < objectCount; i++) {
+			if (c.contains(internalArray[i])) {
+				remove(i);
+				i--;
+				removed = true;
+			}
+		}
+
+		return removed;
+	}
+
+	public int indexOf(Object o) {
+		for (int i = 0; i < objectCount; i++) {
+			if (Objects.equals(internalArray[i], o)) {
+				return i;
+			}
+		}
+
+		return -1;
 	}
 
 }
