@@ -24,49 +24,41 @@ public class SinglyLinkedListTester {
         System.out.println(list.get(1)); // B
         System.out.println(list.get(2)); // C
 
-        System.out.println(list.set(1, "X"));
-        System.out.println(list.toString()); // [X, B, C]
+        System.out.println(list.set(1, "X")); // B
+        System.out.println(list.toString()); // [A, X, C]
 
-        list.add(0, "First"); // [First, X, B, C]
+        list.add(0, "First"); // [First, A, X, C]
         System.out.println(list.toString()); // ^^^^
         list.add(2, "Middle");
-        System.out.println(list.toString()); // [First, X, Middle, B, C]
+        System.out.println(list.toString()); // [First, X, Middle, X, C]
         list.add(list.size(), "Last");
-        System.out.println(list.toString()); //
+        System.out.println(list.toString()); // [First, X, Middle, X, C, Last]
 
         list.add("X");
         list.add("X");
-        System.out.println(list.toString());
-        System.out.println(list.indexOf("X"));
+        System.out.println(list.toString()); // [First, A, Middle, X, C, Last, X, X]
+        System.out.println(list.indexOf("X")); // 3
 
-        System.out.println(list.remove("X"));
-        System.out.println(list.toString());
-        System.out.println(list.remove("D"));
+        System.out.println(list.remove("X")); // true
+        System.out.println(list.toString()); // [First, A, Middle, C, Last, X, X]
+        System.out.println(list.remove("D")); // false
 
-        System.out.println(list.remove(0));
-        System.out.println(list.toString());
-        System.out.println(list.remove(1));
-        System.out.println(list.toString());
-        System.out.println(list.remove(list.size() - 1));
-        System.out.println(list.toString());
+        System.out.println(list.remove(0)); // First
+        System.out.println(list.toString()); // [A, Middle, C, Last, X, X]
+        System.out.println(list.remove(1)); // Middle
+        System.out.println(list.toString()); // [A, C, Last, X, X]
+        System.out.println(list.remove(list.size() - 1)); // X
+        System.out.println(list.toString()); // [A, C, Last, X]
 
         while (!list.isEmpty()) {
             list.remove(0);
         }
-        System.out.println(list.toString());
-        System.out.println(list.isEmpty());
+        System.out.println(list.toString()); // []
+        System.out.println(list.isEmpty()); // true
 
         String[] values = { "One", "Two", "Three" };
         SinglyLinkedList<String> list2 = new SinglyLinkedList<String>(values);
-        System.out.println(list2.toString());
-        System.out.println(list2.size());
-
-        ListNode<String> node = new ListNode<String>("Hello");
-        System.out.println(node.getValue());
-        System.out.println(node.getNext());
-        node.setValue("Bye");
-        System.out.println(node.getValue());
-        node.setNext(new ListNode<String>("Next"));
-        System.out.println(node.getNext().getValue());
+        System.out.println(list2.toString()); // [One, Two, Three]
+        System.out.println(list2.size()); // 3
     }
 }

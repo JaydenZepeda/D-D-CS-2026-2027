@@ -22,6 +22,9 @@ public class SinglyLinkedList<E> {
 	// Constructor: creates a list that contains
 	// all elements from the array values, in the same order
 	public SinglyLinkedList(E[] values) {
+		for (E e : values) {
+			add(e);
+		}
 	}
 
 	public ListNode<E> getHead() {
@@ -53,7 +56,10 @@ public class SinglyLinkedList<E> {
 	// otherwise returns false.
 	public boolean contains(E obj) {
 		for (ListNode<E> node = head; node != null; node = node.getNext()) {
-			if (node.getValue().equals(obj)) {
+			if (node.getValue() == null && obj == null) {
+				return true;
+			}
+			if (node.getValue() != null && node.getValue().equals(obj)) {
 				return true;
 			}
 		}
@@ -65,7 +71,10 @@ public class SinglyLinkedList<E> {
 	public int indexOf(E obj) {
 		int i = 0;
 		for (ListNode<E> node = head; node != null; node = node.getNext()) {
-			if (node.getValue().equals(obj)) {
+			if (node.getValue() == null && obj == null) {
+				return i;
+			}
+			if (node.getValue() != null && node.getValue().equals(obj)) {
 				return i;
 			}
 			i++;
@@ -95,45 +104,42 @@ public class SinglyLinkedList<E> {
 		if (i == -1) {
 			return false;
 		}
-		ListNode<E> before = head;
-		ListNode<E> after = tail;
-		int j = 0;
-		for (ListNode<E> node = head; j == i + 1 || node != null; node = node.getNext()) {
-			if (i == 0 && j == 1) {
-				head = node;
-			}
-			if (j == i - 1) {
-				before = node;
-			}
-			if (j == i + 1) {
-				after = node;
-			}
-			j++;
-		}
-		before.setNext(after);
+		remove(i);
 		return true;
 	}
 
 	// Returns the i-th element.
 	public E get(int i) {
+		if (i < 0) {
+			throw new IndexOutOfBoundsException("Invalid Index");
+		}
 		ListNode<E> node = head;
 		for (int j = 0; j < i; j++) {
 			if (node == null) {
 				throw new IndexOutOfBoundsException("Index is Invalid");
 			}
 			node = node.getNext();
+		}
+		if (node == null) {
+			throw new IndexOutOfBoundsException("Invalid Index");
 		}
 		return node.getValue();
 	}
 
 	// Replaces the i-th element with obj and returns the old value.
 	public E set(int i, E obj) {
+		if (i < 0) {
+			throw new IndexOutOfBoundsException("Invalid Index");
+		}
 		ListNode<E> node = head;
 		for (int j = 0; j < i; j++) {
 			if (node == null) {
 				throw new IndexOutOfBoundsException("Index is Invalid");
 			}
 			node = node.getNext();
+		}
+		if (node == null) {
+			throw new IndexOutOfBoundsException();
 		}
 		E old = node.getValue();
 		node.setValue(obj);
@@ -143,44 +149,68 @@ public class SinglyLinkedList<E> {
 	// Inserts obj to become the i-th element. Increments the size
 	// of the list by one.
 	public void add(int i, E obj) {
-		ListNode<E> node = head;
-		ListNode<E> before = head;
-		ListNode<E> after = tail;
-		for (int j = 0; j < i + 1; j++) {
-			if (node.getNext() == null) {
-				add(obj);
-			}
-			if (j == i + 1) {
-				after = node;
-			}
-			if (j == i - 1) {
-				before = node;
-			}
-			node = node.getNext();
+		if (i < 0) {
+			throw new IndexOutOfBoundsException("Index is Invalid");
 		}
-		ListNode<E> newNode = new ListNode<E>(obj, after);
+		if (i == 0) {
+			ListNode<E> newNode = new ListNode<E>(obj, head);
+			head = newNode;
+			if (tail == null) {
+				tail = newNode;
+			}
+			return;
+		}
+		ListNode<E> before = head;
+		for (int j = 1; j < i; j++) {
+			if (before == null || before.getNext() == null) {
+				throw new IndexOutOfBoundsException("Index is Invalid");
+			}
+			before = before.getNext();
+		}
+		if (before == null) {
+			throw new IndexOutOfBoundsException("Index is Invalid");
+		}
+		ListNode<E> newNode = new ListNode<E>(obj, before.getNext());
 		before.setNext(newNode);
+		if (newNode.getNext() == null) {
+			tail = newNode;
+		}
 	}
 
 	// Removes the i-th element and returns its value.
 	// Decrements the size of the list by one.
 	public E remove(int i) {
-		ListNode<E> before = head;
-		ListNode<E> after = tail;
-		ListNode<E> node = head;
-		for (int j = 0; j < i + 1; j++) {
-			if (j == i - 1) {
-				before = node;
-			}
-			if (j == i + 1) {
-				after = node;
-			}
-			if (node.getNext() == null && j == i) {
-				tail = before;
-			}
-			node = node.getNext();
+		if (i < 0) {
+			throw new IndexOutOfBoundsException("Index is Invalid");
 		}
-		before.setNext(after);
+		if (i == 0) {
+			if (head == null) {
+				throw new IndexOutOfBoundsException("Index is Invalid");
+			}
+			E old = head.getValue();
+			head = head.getNext();
+			if (head == null) {
+				tail = null;
+			}
+			return old;
+		}
+		ListNode<E> before = head;
+		for (int j = 1; j < i; j++) {
+			if (before == null || before.getNext() == null) {
+				throw new IndexOutOfBoundsException("Index is Invalid");
+			}
+			before = before.getNext();
+		}
+		if (before == null || before.getNext() == null) {
+			throw new IndexOutOfBoundsException("Index is Invalid");
+		}
+		ListNode<E> node = before.getNext();
+		E old = node.getValue();
+		before.setNext(node.getNext());
+		if (node == tail) {
+			tail = before;
+		}
+		return old;
 	}
 
 	// Returns a string representation of this list exactly like that for
