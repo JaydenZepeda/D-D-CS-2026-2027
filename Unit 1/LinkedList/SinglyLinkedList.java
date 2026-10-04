@@ -22,6 +22,11 @@ public class SinglyLinkedList<E> {
 	// Constructor: creates a list that contains
 	// all elements from the array values, in the same order
 	public SinglyLinkedList(E[] values) {
+		if (values == null) {
+			head = null;
+			tail = null;
+			return;
+		}
 		for (E e : values) {
 			add(e);
 		}
