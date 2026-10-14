@@ -15,17 +15,18 @@ public class LinkedListOps {
             }
         }
         return false;
-        // if (start == null) {
-        // return false;
-        // }
-        // ArrayList<ListNode> nodes = new ArrayList<>();
-        // nodes.add(start);
-        // for (ListNode node = start.getNext(); node != null; node = node.getNext()) {
-        // if (nodes.contains(node)) {
-        // return true;
-        // }
-        // nodes.add(node);
-        // }
-        // return false;
+        
+        // rempove nodes value from many linkedlist it might be in
+        public static void delete(ListNode node) {
+            node.setValue(node.getNext().getValue());
+            node.setNext(node.getNext().getNext());
+            return;
+        }
+        
+        public static void printListInReverse(ListNode head) {
+            for(ListNode node = head; node =! null; node = node.getNext()) {
+              
+            }
+        }
     }
 }
